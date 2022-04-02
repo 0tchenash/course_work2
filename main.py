@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory, request
-from utils import get_posts_all, get_post_by_pk, get_comments_by_post_id, search_for_posts, get_posts_by_user
+from utils import get_posts_all, get_post_by_pk, get_comments_by_post_id, search_for_posts, get_posts_by_user, search_tags
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ def search():
     return render_template('search.html')
 
 
-@app.route('/search/search')
+@app.route('/search/results/')
 def search_posts():
     s = request.args.get('s')
     list_of_posts = search_for_posts(s)
@@ -33,6 +33,12 @@ def search_posts():
 def user_feed(user_name):
     users_posts = get_posts_by_user(user_name)
     return render_template('user-feed.html', posts=users_posts)
+
+
+@app.route('/tags/<tag>')
+def search_tags_of(tag):
+    list_of_posts = search_tags(tag)
+    return render_template('tag.html', posts=list_of_posts, tag=tag)
 
 
 app.run(debug=True)

@@ -51,3 +51,12 @@ def get_post_by_pk(pk):
             return post
 
 
+def search_tags(tag):
+    posts = get_posts_all()
+    list_of_posts = []
+    for post in posts:
+        for i in post['tags']:
+            if tag in i:
+                list_of_posts.append(post)
+    return list_of_posts
+
