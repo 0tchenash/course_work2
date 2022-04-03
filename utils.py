@@ -60,3 +60,20 @@ def search_tags(tag):
                 list_of_posts.append(post)
     return list_of_posts
 
+
+def load_bookmarks():
+    data = []
+    with open('data/bookmarks.json', encoding='windows-1251') as file:
+        data = json.load(file)
+    return data
+
+
+def add_bookmarks(path, data, new_data):
+    if new_data not in data:
+        data.append(new_data)
+    else:
+        for elem in data:
+            if elem == new_data:
+                data.remove(elem)
+    with open(path, 'w') as file:
+        json.dump(data, file, indent=2, ensure_ascii=False)

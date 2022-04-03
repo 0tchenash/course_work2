@@ -1,13 +1,15 @@
-from flask import Flask, render_template, send_from_directory, request
-from utils import get_posts_all, get_post_by_pk, get_comments_by_post_id, search_for_posts, get_posts_by_user, search_tags
+from flask import Flask, render_template, send_from_directory, request, redirect
+from utils import get_posts_all, get_post_by_pk, get_comments_by_post_id, search_for_posts, get_posts_by_user, search_tags, add_bookmarks, load_bookmarks
 
 app = Flask(__name__)
+path = 'data/bookmarks.json'
 
 
 @app.route('/')
 def main_page():
     posts = get_posts_all()
-    return render_template('index.html', posts=posts)
+    bookmarks = load_bookmarks()
+    return render_template('index.html', posts=posts, bookmarks=bookmarks)
 
 
 @app.route('/posts/<int:postid>')
@@ -39,6 +41,21 @@ def user_feed(user_name):
 def search_tags_of(tag):
     list_of_posts = search_tags(tag)
     return render_template('tag.html', posts=list_of_posts, tag=tag)
+
+
+@app.route('/bookmarks/add/<int:postid>')
+def add_to_bookmarks(postid):
+    bookmark = request.args.get('bookmark')
+    posts = load_bookmarks()
+    post = get_post_by_pk(postid)
+    add_bookmarks(path, posts, post)
+    return redirect('/', code=302)
+
+
+@app.route('/bookmarks')
+def show_bookmarks():
+    bookmarks = load_bookmarks()
+    return render_template('bookmarks.html', posts=bookmarks)
 
 
 app.run(debug=True)
