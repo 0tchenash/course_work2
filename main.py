@@ -58,4 +58,16 @@ def show_bookmarks():
     return render_template('bookmarks.html', posts=bookmarks)
 
 
+@app.route('/api/posts')
+def get_data():
+    data = get_posts_all()
+    return render_template('apiposts.html', data=data)
+
+
+@app.route('/api/posts/<int:postid>')
+def get_post(postid):
+    post = get_post_by_pk(postid)
+    return render_template('apipostid.html', post=post)
+
+
 app.run(debug=True)

@@ -62,7 +62,6 @@ def search_tags(tag):
 
 
 def load_bookmarks():
-    data = []
     with open('data/bookmarks.json', encoding='windows-1251') as file:
         data = json.load(file)
     return data
