@@ -2,21 +2,17 @@ import json
 
 
 def get_posts_all():
+    """Получаем список постов из файла"""
     posts = []
     with open('data/data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
         for i in data:
             posts.append(i)
     return posts
-    # except FileNotFoundError:
-    #     # Будет выполнено, если файл не найден
-    #     logging.error("Файл не найден")
-    # except JSONDecodeError:
-    #     # Будет выполнено, если файл найден, но не превращается из JSON
-    #     logging.error("Файл не удается преобразовать")
 
 
 def get_posts_by_user(user_name):
+    """Получаем пост по имени"""
     posts = get_posts_all()
     users_posts = []
     for post in posts:
@@ -26,6 +22,7 @@ def get_posts_by_user(user_name):
 
 
 def get_comments_by_post_id(post_id):
+    """Получаем список комментариев под необходимым постом"""
     comments = []
     with open('data/comments.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -36,6 +33,7 @@ def get_comments_by_post_id(post_id):
 
 
 def search_for_posts(query):
+    """Получаем список постов по вхождению слова"""
     data = get_posts_all()
     list_of_posts = []
     for post in data:
@@ -45,6 +43,7 @@ def search_for_posts(query):
 
 
 def get_post_by_pk(pk):
+    """Получаем пост по айди"""
     data = get_posts_all()
     for post in data:
         if pk == post['pk']:
@@ -52,6 +51,7 @@ def get_post_by_pk(pk):
 
 
 def search_tags(tag):
+    """Получаем список постов по тегам"""
     posts = get_posts_all()
     list_of_posts = []
     for post in posts:
@@ -62,17 +62,19 @@ def search_tags(tag):
 
 
 def load_bookmarks():
+    """Получаем данные из файла"""
     with open('data/bookmarks.json', encoding='utf-8') as file:
         data = json.load(file)
     return data
 
 
 def add_bookmarks(path, data, new_data):
+    """Обновляем файл. Если нет поста в файле - добавляем, если есть - удаляем"""
     if new_data not in data:
         data.append(new_data)
     else:
-        for elem in data:
-            if elem == new_data:
-                data.remove(elem)
+        for post in data:
+            if post == new_data:
+                data.remove(post)
     with open(path, 'w') as file:
         json.dump(data, file, indent=2, ensure_ascii=False)

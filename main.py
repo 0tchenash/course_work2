@@ -5,6 +5,7 @@ from utils import get_posts_all, get_post_by_pk, get_comments_by_post_id, search
 app = Flask(__name__)
 path = 'data/bookmarks.json'
 
+
 app.config.from_pyfile('config.py')
 
 
