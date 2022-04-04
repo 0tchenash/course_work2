@@ -1,8 +1,11 @@
-from flask import Flask, render_template, send_from_directory, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from utils import get_posts_all, get_post_by_pk, get_comments_by_post_id, search_for_posts, get_posts_by_user, search_tags, add_bookmarks, load_bookmarks
+
 
 app = Flask(__name__)
 path = 'data/bookmarks.json'
+
+app.config.from_pyfile('config.py')
 
 
 @app.route('/')
@@ -61,13 +64,14 @@ def show_bookmarks():
 @app.route('/api/posts')
 def get_data():
     data = get_posts_all()
-    return render_template('apiposts.html', data=data)
+    return jsonify(data)
 
 
 @app.route('/api/posts/<int:postid>')
 def get_post(postid):
     post = get_post_by_pk(postid)
-    return render_template('apipostid.html', post=post)
+    return jsonify(post)
 
 
-app.run(debug=True)
+if __name__ == '__main__':
+	app.run()
